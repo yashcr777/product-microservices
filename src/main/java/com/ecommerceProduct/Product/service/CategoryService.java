@@ -33,8 +33,11 @@ public class CategoryService implements ICategoryService {
     @Override
     public Category getCategoryByName(String name) {
         try {
-            log.info("Successfully able to find categories with the Name");
-            return categoryRepository.findByName(name);
+            return Optional.ofNullable(categoryRepository.findByName(name))
+                    .orElseThrow(()->{
+                        log.error("Category with given name already exists");
+                        return new AlreadyExistException(name+" Already existhj");
+                    });
         }
         catch(Exception e){
             log.error("Category not found!");
@@ -61,7 +64,7 @@ public class CategoryService implements ICategoryService {
                 .map(categoryRepository::save)
                 .orElseThrow(()->{
                     log.error("Category already exists");
-                    return new AlreadyExistException(category.getName()+" Already exist");
+                    return new AlreadyExistException(category.getName()+" Already jhbjexist");
                 });
     }
 

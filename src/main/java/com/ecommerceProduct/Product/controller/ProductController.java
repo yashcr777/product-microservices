@@ -50,7 +50,7 @@ public class ProductController {
     {
         try {
             Product product=productService.getProductById(productId);
-            ProductDto productDto=productService.convertToDo(product);
+//            ProductDto productDto=productService.convertToDo(product);
             return product;
         } catch (Exception e) {
             return null;
@@ -87,6 +87,7 @@ public class ProductController {
             {
                 return null;
             }
+            System.out.println(products);
             List<ProductDto>convertedProducts=productService.getConvertedProducts(products);
             return products;
         } catch (ResourceNotFoundException e) {
@@ -94,47 +95,42 @@ public class ProductController {
         }
     }
     @GetMapping("/products/by/category-and-name")
-    public ResponseEntity<ApiResponse>getProductsByCategoryAndBrand(@RequestParam String category,@RequestParam String brandName)
+    public List<Product>getProductsByCategoryAndBrand(@RequestParam String category,@RequestParam String brandName)
     {
         try {
             List<Product>products=productService.getProductsByCategoryAndBrand(category,brandName);
             if(products.isEmpty())
             {
-                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products with given category name and brand name",null));
+                return null;
             }
             List<ProductDto>convertedProducts=productService.getConvertedProducts(products);
-            return ResponseEntity.ok(new ApiResponse("Success",convertedProducts));
+            return products;
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.ok(new ApiResponse(e.getMessage(),null));
+            return null;
         }
     }
     @GetMapping("/products/by/name")
-    public ResponseEntity<ApiResponse>getProductsByName(@RequestParam String name)
+    public Product getProductsByName(@RequestParam String name)
     {
         try {
-            List<Product>products=productService.getProductsByName(name);
-            if(products.isEmpty())
-            {
-                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products with given name",null));
-            }
-            List<ProductDto>convertedProducts=productService.getConvertedProducts(products);
-            return ResponseEntity.ok(new ApiResponse("Success",convertedProducts));
+            Product products=productService.getProductsByName(name);
+            return products;
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.ok(new ApiResponse(e.getMessage(),null));
+            return null;
         }
     }
     @GetMapping("/products/by/brand-name")
-    public ResponseEntity<ApiResponse>getProductsByBrandName(@RequestParam String brandName)
+    public List<Product>getProductsByBrandName(@RequestParam String brandName)
     {
         try {
             List<Product>products=productService.getProductsByBrand(brandName);
             if(products.isEmpty()){
-                return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No products with given brand name",null));
+                return null;
             }
             List<ProductDto>convertedProducts=productService.getConvertedProducts(products);
-            return ResponseEntity.ok(new ApiResponse("Success",convertedProducts));
+            return products;
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.ok(new ApiResponse(e.getMessage(),null));
+            return null;
         }
     }
     @GetMapping("/product/count/by-brand/and-name")

@@ -19,22 +19,22 @@ import java.util.List;
 public class CategoryController {
     private final ICategoryService categoryService;
         @GetMapping("/all")
-    public ResponseEntity<ApiResponse> getAllCategories()
+    public List<Category> getAllCategories()
     {
         try {
             List<Category> categoryList=categoryService.getAllCategories();
-            return ResponseEntity.ok(new ApiResponse("Found",categoryList));
+            return categoryList;
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Error",null));
+            return null;
         }
     }
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse>createCategory(@RequestBody Category name){
+    public Category createCategory(@RequestBody Category name){
         try {
             Category category=categoryService.addCategory(name);
-            return ResponseEntity.ok(new ApiResponse("Success",category));
+            return category;
         } catch (AlreadyExistException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse(e.getMessage(),null));
+            return null;
         }
     }
     @GetMapping("/category/{id}/category")

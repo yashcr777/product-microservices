@@ -17,7 +17,7 @@ public interface IProductService {
     List<Product>getProductByCategory(String category);
     List<Product>getProductsByBrand(String brand);
     List<Product>getProductsByCategoryAndBrand(String category,String brand);
-    List<Product>getProductsByName(String name);
+    Product getProductsByName(String name);
     List<Product>getProductsByBrandAndName(String brand,String name);
     Long countProductsByBrandAndName(String brand,String name);
     ProductDto convertToDo(Product product);
