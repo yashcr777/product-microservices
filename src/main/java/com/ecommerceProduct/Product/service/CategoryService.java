@@ -36,7 +36,7 @@ public class CategoryService implements ICategoryService {
             return Optional.ofNullable(categoryRepository.findByName(name))
                     .orElseThrow(()->{
                         log.error("Category with given name already exists");
-                        return new AlreadyExistException(name+" Already existhj");
+                        return new ResourceNotFoundException(name+" does not exist");
                     });
         }
         catch(Exception e){
