@@ -38,12 +38,12 @@ public class CategoryController {
         }
     }
     @GetMapping("/category/{id}/category")
-    public ResponseEntity<ApiResponse>getCategoryById(@PathVariable Long id){
+    public Category getCategoryById(@PathVariable Long id){
         try {
             Category category=categoryService.getCategoryById(id);
-            return ResponseEntity.ok(new ApiResponse("Found",category));
+            return category;
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
+            return null;
         }
     }
     @GetMapping("/category/{name}/categoryByName")
@@ -53,5 +53,13 @@ public class CategoryController {
         } catch (ResourceNotFoundException e) {
             return null;
         }
+    }
+    @GetMapping("/sort/{field}")
+    public List<Category>sortCategory(@PathVariable String field){
+        return categoryService.sortByField(field);
+    }
+    @GetMapping("/sortdesc/{field}")
+    public List<Category>sortCategoryByDesc(@PathVariable String field){
+        return categoryService.sortByFieldDesc(field);
     }
 }
