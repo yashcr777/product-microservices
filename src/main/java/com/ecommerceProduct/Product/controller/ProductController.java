@@ -8,10 +8,11 @@ import com.ecommerceProduct.Product.exceptions.ResourceNotFoundException;
 import com.ecommerceProduct.Product.response.ApiResponse;
 import com.ecommerceProduct.Product.service.IProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -50,7 +51,6 @@ public class ProductController {
     {
         try {
             Product product=productService.getProductById(productId);
-//            ProductDto productDto=productService.convertToDo(product);
             return product;
         } catch (Exception e) {
             return null;
@@ -101,12 +101,12 @@ public class ProductController {
             List<Product>products=productService.getProductsByCategoryAndBrand(category,brandName);
             if(products.isEmpty())
             {
-                return null;
+                return Collections.emptyList();
             }
             List<ProductDto>convertedProducts=productService.getConvertedProducts(products);
             return products;
         } catch (ResourceNotFoundException e) {
-            return null;
+            return Collections.emptyList();
         }
     }
     @GetMapping("/products/by/name")
@@ -125,12 +125,12 @@ public class ProductController {
         try {
             List<Product>products=productService.getProductsByBrand(brandName);
             if(products.isEmpty()){
-                return null;
+                return Collections.emptyList();
             }
             List<ProductDto>convertedProducts=productService.getConvertedProducts(products);
             return products;
         } catch (ResourceNotFoundException e) {
-            return null;
+            return Collections.emptyList();
         }
     }
     @GetMapping("/product/count/by-brand/and-name")
@@ -151,12 +151,12 @@ public class ProductController {
     public List<Product>sortProductsByDesc(@PathVariable String field){
         return productService.sortByFieldDesc(field);
     }
-    @GetMapping("/pagination/{offset}/{pageSize}")
-    public List<Product> productPagination(@PathVariable int offset, @PathVariable int pageSize){
-        return productService.getProductByPagination(offset,pageSize).getContent();
+    @GetMapping("/pagination")
+    public Page<Product> productPagination(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "10")  int pageSize){
+        return productService.getProductByPagination(offset,pageSize);
     }
-    @GetMapping("/paginationAndSorting/{offset}/{pageSize}/{field}")
-    public List<Product> productPaginationAndSorting(@PathVariable int offset, @PathVariable int pageSize,@PathVariable String field){
-        return productService.getProductByPaginationAndSorting(offset,pageSize,field).getContent();
+    @GetMapping("/paginationAndSorting/{field}")
+    public Page<Product> productPaginationAndSorting(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "10")  int pageSize,@PathVariable String field){
+        return productService.getProductByPaginationAndSorting(offset,pageSize,field);
     }
 }

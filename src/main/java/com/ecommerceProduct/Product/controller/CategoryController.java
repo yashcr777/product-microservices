@@ -7,6 +7,7 @@ import com.ecommerceProduct.Product.exceptions.ResourceNotFoundException;
 import com.ecommerceProduct.Product.response.ApiResponse;
 import com.ecommerceProduct.Product.service.ICategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,5 +62,13 @@ public class CategoryController {
     @GetMapping("/sortdesc/{field}")
     public List<Category>sortCategoryByDesc(@PathVariable String field){
         return categoryService.sortByFieldDesc(field);
+    }
+    @GetMapping("/pagination")
+    public Page<Category> categoryPagination(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "10")  int pageSize){
+        return categoryService.getCategoryByPagination(offset,pageSize);
+    }
+    @GetMapping("/paginationAndSorting/{field}")
+    public Page<Category> categoriesPaginationAndSorting(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "10")  int pageSize,@PathVariable String field){
+        return categoryService.getCategoryByPaginationAndSorting(offset,pageSize,field);
     }
 }

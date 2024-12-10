@@ -4,5 +4,3 @@ eureka:
   client:
     fetch-registry: true
     register-with-eureka: true
-  service-url:
-    defaultZone: http://loalhost:8761/eureka
